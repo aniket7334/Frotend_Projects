@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #main {
+            position: relative;
+
+        }
+
+        #div {
+            position: absolute;
+            top: 50%;
+            right: 40%;
+        }
+
+        #image {
+            max-width: 100%;
+
+            opacity: 1;
+            object-fit: cover;
+        }
+
+        input {
+            width: 300px;
+            height: 40px;
+            border-radius: 10px;
+            background-color: skyblue;
+            color: black;
+            font-size: 20px
+        }
+
+        button {
+            width: 100px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            background-color: #006400;
+            margin-left: 10px;
+
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            background-image:
+                linear-gradient(to right, var(--secondary-color),
+                    var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0px 2px 10px var(--shadow-color);
+        }
+
+        #display {
+            color: #00FF00;
+            font-size: 50px;
+            position: absolute;
+            top: 60%;
+            right: 45%;
+
+        }
+
+        #date {
+            color: #00FF00;
+            font-size: 50px;
+            position: absolute;
+            top: 20%;
+            right: 50%;
+
+        }
+
+        #time {
+            background: linear-gradient(to right, #f32170,
+                    #ff6b08, #cf23cf, #eedd44);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            font-size: 100px;
+            position: absolute;
+            top: 20%;
+            right: 38%;
+        }
+
+        #day {
+            position: absolute;
+            background: #551780;
+            background: linear-gradient(to left, #551780 0%, #7A7BFF 25%, #FFB4D8 50%, #FFB74E 75%, #00FF00 50%, #571509 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 50px;
+            top: 10%;
+            right: 45%;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+
+        <img src="/Frontend Projects/WeatherInfo/weather.jpg" id="image" alt="image">
+        <div id="div">
+            <input type="text" placeholder="enter the city" id="input">
+            <button id="button" onclick="temp()">Show</button>
+        </div>
+        <div id="display"></div>
+    </div>
+
+    <script>
+
+        let main = document.getElementById("main");
+
+        async function temp() {
+            let city = document.getElementById('input').value;
+            let api_key = "90d9c4adf3aa3bfeadfd4f2a340aea04";
+            const api = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}`);
+            let data = await api.json()
+            console.log("DATA:", data);
+
+            let div = document.getElementById("div");
+            //let p = document.createElement("p");
+            let displayTemp = document.getElementById('display');
+
+
+            //displayTemp.setAttribute("id", "temp");
+
+            console.log(div);
+            //div.appendChild(p);
+            //displayTemp.appendChild(p);
+
+
+
+            let kelvin = data.main.temp;
+            let convert = kelvin - 273.13;
+            displayTemp.innerHTML = ` Today: ${convert.toPrecision(4)} ${'&#8451'} <br> City: ${city}`;
+
+            console.log(displayTemp);
+        }
+        
+        
+
+        let p1 = document.createElement("p");
+        let p2 = document.createElement("p");
+        let p3 = document.createElement("p");
+
+        let date = new Date();
+
+        const days = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+        let day = days[date.getDay()];
+
+        p3.innerHTML = day;
+        p1.innerHTML = ` ${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+
+        p1.setAttribute("id", "date");
+        p2.setAttribute("id", "time");
+        p3.setAttribute("id", "day");
+
+        main.appendChild(p1);
+        main.appendChild(p2);
+        main.appendChild(p3);
+
+
+        setInterval(function () {
+
+            const newDate = new Date();
+            p2.innerHTML = newDate.toLocaleTimeString();
+
+        }, 1000);
+
+
+
+    </script>
+</body>
+
+</html>
